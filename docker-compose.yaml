@@ -1,0 +1,37 @@
+
+services:
+  db:
+    image: postgres
+    hostname: postgres
+    restart: on-failure
+    networks:
+      - rootext
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=rootext
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data 
+      - ./initScript/init.sql:/docker-entrypoint-initdb.d/init.sql
+  
+
+  redis:
+    image: bitnami/redis:7.4.1
+    restart: always
+    hostname: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./cache/redis:/root/redis
+    networks:
+      - rootext
+    environment:
+      - REDIS_PASSWORD=admin
+      - REDIS_PORT=6379
+      - REDIS_DATABASES=3
+
+networks:
+  rootext:
+    driver: bridge

@@ -1,0 +1,589 @@
+definitions:
+  entity.Post:
+    properties:
+      content:
+        type: string
+      createdAt:
+        type: string
+      id:
+        type: integer
+      score:
+        type: integer
+      title:
+        type: string
+      updatedAt:
+        type: string
+      userID:
+        type: integer
+    type: object
+  entity.User:
+    properties:
+      created_at:
+        type: string
+      id:
+        type: integer
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  params.CreatePostReq:
+    properties:
+      content:
+        type: string
+      title:
+        type: string
+    type: object
+  params.CreatePostRes:
+    properties:
+      post:
+        $ref: '#/definitions/entity.Post'
+    type: object
+  params.GetAllPostRes:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/entity.Post'
+        type: array
+    type: object
+  params.GetByIdRes:
+    properties:
+      post:
+        $ref: '#/definitions/entity.Post'
+    type: object
+  params.GetSortedPostRes:
+    properties:
+      posts:
+        items:
+          $ref: '#/definitions/entity.Post'
+        type: array
+    type: object
+  params.LoginRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  params.LoginResponse:
+    properties:
+      tokens:
+        $ref: '#/definitions/params.Tokens'
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  params.RegisterRequest:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  params.RegisterResponse:
+    properties:
+      user:
+        $ref: '#/definitions/entity.User'
+    type: object
+  params.TokenRenewReq:
+    properties:
+      refresh_token:
+        type: string
+    type: object
+  params.TokenRenewRes:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  params.Tokens:
+    properties:
+      access_token:
+        type: string
+      refresh_token:
+        type: string
+    type: object
+  params.UpdatePostReq:
+    properties:
+      content:
+        type: string
+      id:
+        type: integer
+      title:
+        type: string
+    type: object
+  params.UpdatePostRes:
+    properties:
+      post:
+        $ref: '#/definitions/entity.Post'
+    type: object
+  params.VotePostReq:
+    properties:
+      id:
+        type: integer
+      vote:
+        type: integer
+    type: object
+  postHandler.Response:
+    properties:
+      data: {}
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
+  userHandler.Response:
+    properties:
+      data: {}
+      error:
+        type: boolean
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /post:
+    get:
+      description: Retrieve all posts for the authenticated user
+      parameters:
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with list of posts
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.GetAllPostRes'
+              type: object
+        "400":
+          description: Bad request - Unable to retrieve posts
+          schema:
+            $ref: '#/definitions/postHandler.Response'
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get all posts
+      tags:
+      - posts
+    post:
+      consumes:
+      - application/json
+      description: Create a new post with the given title and content
+      parameters:
+      - description: Create Post Request
+        in: body
+        name: CreatePostReq
+        required: true
+        schema:
+          $ref: '#/definitions/params.CreatePostReq'
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with error always false
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.CreatePostRes'
+              type: object
+        "400":
+          description: Bad Request
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Create a new post
+      tags:
+      - posts
+    put:
+      consumes:
+      - application/json
+      description: Update an existing post with the given title and content
+      parameters:
+      - description: Update Post Request
+        in: body
+        name: UpdatePostReq
+        required: true
+        schema:
+          $ref: '#/definitions/params.UpdatePostReq'
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with error always false
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.UpdatePostRes'
+              type: object
+        "400":
+          description: Bad request - Invalid input or post not found
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Update a post
+      tags:
+      - posts
+  /post/{id}:
+    delete:
+      description: Delete a post by its ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with error always false
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad request - Invalid ID or post not found
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Delete a post
+      tags:
+      - posts
+    get:
+      description: Retrieve a specific post by its ID
+      parameters:
+      - description: Post ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with post details
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.GetByIdRes'
+              type: object
+        "400":
+          description: Bad request - Invalid ID or post not found
+          schema:
+            $ref: '#/definitions/postHandler.Response'
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Get a post by ID
+      tags:
+      - posts
+  /post/getSorted:
+    get:
+      description: Retrieve posts sorted by score or creation date within a time range
+      parameters:
+      - description: 'Sort by (default: score)'
+        enum:
+        - score
+        - created_at
+        in: query
+        name: sort
+        type: string
+      - description: 'Time range (default: month)'
+        enum:
+        - day
+        - week
+        - month
+        in: query
+        name: range
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with sorted list of posts
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.GetSortedPostRes'
+              type: object
+        "400":
+          description: Bad request - Unable to retrieve posts
+          schema:
+            $ref: '#/definitions/postHandler.Response'
+      summary: Get sorted posts
+      tags:
+      - posts
+  /post/vote:
+    post:
+      consumes:
+      - application/json
+      description: Cast a vote (e.g., upvote or downvote) on a post
+      parameters:
+      - description: Vote Post Request
+        in: body
+        name: VotePostReq
+        required: true
+        schema:
+          $ref: '#/definitions/params.VotePostReq'
+      - description: Bearer token for authentication
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with error always false
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "400":
+          description: Bad request - Invalid vote or post not found
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+        "401":
+          description: Unauthorized - Token missing or invalid
+          schema:
+            allOf:
+            - $ref: '#/definitions/postHandler.Response'
+            - properties:
+                data:
+                  type: object
+                error:
+                  type: boolean
+              type: object
+      security:
+      - ApiKeyAuth: []
+      summary: Vote on a post
+      tags:
+      - posts
+  /user/auth/login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticate a user with their credentials and return a token
+      parameters:
+      - description: Login Request with user credentials
+        in: body
+        name: LoginRequest
+        required: true
+        schema:
+          $ref: '#/definitions/params.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with authentication token
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.LoginResponse'
+              type: object
+        "400":
+          description: Bad request - Invalid input or credentials
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: User login
+      tags:
+      - authentication
+  /user/auth/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user with the provided credentials
+      parameters:
+      - description: Register Request with user details
+        in: body
+        name: RegisterRequest
+        required: true
+        schema:
+          $ref: '#/definitions/params.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with registered user details
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.RegisterResponse'
+              type: object
+        "400":
+          description: Bad request - Invalid input or registration failed
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: User registration
+      tags:
+      - authentication
+  /user/auth/token/tokenRenew:
+    post:
+      consumes:
+      - application/json
+      description: Renew an existing authentication token using a refresh token
+      parameters:
+      - description: Token Renew Request with refresh token
+        in: body
+        name: TokenRenewReq
+        required: true
+        schema:
+          $ref: '#/definitions/params.TokenRenewReq'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Successful response with new authentication token
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/params.TokenRenewRes'
+              type: object
+        "400":
+          description: Bad request - Invalid input or refresh token
+          schema:
+            allOf:
+            - $ref: '#/definitions/userHandler.Response'
+            - properties:
+                data:
+                  type: object
+              type: object
+      summary: Refresh authentication token
+      tags:
+      - authentication
+swagger: "2.0"

@@ -1,0 +1,27 @@
+---
+type: yml
+
+auth:
+  sign_key: ladncau&lipnlf61651#5f5ff$541s%1655d516@
+  access_expiration_time: 24h #hours
+  refresh_expiration_time: 48h #hours
+  access_subject: ac
+  refresh_subject: rt
+  authMiddlewareContextKey: claims
+
+http_server:
+  port: 8088
+
+postgres:
+  database: rootext
+  username: admin
+  password: admin
+  host: localhost
+  port: 5432
+
+redis:
+  host: localhost
+  port: 6379
+  password: admin
+  db: 3 
+

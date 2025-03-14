@@ -2,6 +2,8 @@
 
 ## Get Started:
 
-1- > **sudo docker compose up**
+1- 
+> **sudo docker compose up**
 
-2- > **go run main.go**
+2- 
+> **go run main.go**

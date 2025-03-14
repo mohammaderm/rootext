@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"rootext/config"
-	"rootext/service/authService"
+	"github.com/mohammaderm/rootext/config"
+	"github.com/mohammaderm/rootext/service/authService"
 
 	mw "github.com/labstack/echo-jwt/v4"
 	"github.com/labstack/echo/v4"

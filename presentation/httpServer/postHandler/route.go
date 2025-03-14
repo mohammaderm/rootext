@@ -1,7 +1,7 @@
 package postHandler
 
 import (
-	"rootext/presentation/httpServer/middleware"
+	"github.com/mohammaderm/rootext/presentation/httpServer/middleware"
 
 	"github.com/labstack/echo/v4"
 )

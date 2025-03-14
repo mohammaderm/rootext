@@ -1,7 +1,7 @@
 package params
 
 import (
-	"rootext/entity"
+	"github.com/mohammaderm/rootext/entity"
 )
 
 type RegisterRequest struct {

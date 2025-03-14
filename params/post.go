@@ -1,6 +1,6 @@
 package params
 
-import "rootext/entity"
+import "github.com/mohammaderm/rootext/entity"
 
 type CreatePostReq struct {
 	Title   string `json:"title"`

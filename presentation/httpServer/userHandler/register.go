@@ -2,7 +2,8 @@ package userHandler
 
 import (
 	"net/http"
-	"rootext/params"
+
+	"github.com/mohammaderm/rootext/params"
 
 	"github.com/labstack/echo/v4"
 )

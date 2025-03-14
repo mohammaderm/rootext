@@ -3,7 +3,8 @@ package migrator
 import (
 	"database/sql"
 	"fmt"
-	"rootext/repository/postgres"
+
+	"github.com/mohammaderm/rootext/repository/postgres"
 
 	_ "github.com/lib/pq"
 	migrate "github.com/rubenv/sql-migrate"

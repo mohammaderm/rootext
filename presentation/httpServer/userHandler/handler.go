@@ -1,8 +1,8 @@
 package userHandler
 
 import (
-	"rootext/service/authService"
-	"rootext/service/userService"
+	"github.com/mohammaderm/rootext/service/authService"
+	"github.com/mohammaderm/rootext/service/userService"
 )
 
 type Handler struct {

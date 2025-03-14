@@ -2,9 +2,10 @@ package postHandler
 
 import (
 	"net/http"
-	"rootext/params"
-	"rootext/pkg/claim"
 	"strconv"
+
+	"github.com/mohammaderm/rootext/params"
+	"github.com/mohammaderm/rootext/pkg/claim"
 
 	"github.com/labstack/echo/v4"
 )

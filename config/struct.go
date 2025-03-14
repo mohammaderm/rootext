@@ -1,10 +1,11 @@
 package config
 
 import (
-	"rootext/repository/postgres"
-	"rootext/repository/redis"
-	"rootext/service/authService"
 	"time"
+
+	"github.com/mohammaderm/rootext/repository/postgres"
+	"github.com/mohammaderm/rootext/repository/redis"
+	"github.com/mohammaderm/rootext/service/authService"
 )
 
 type Config struct {
